@@ -15,10 +15,6 @@
     "electron": "^36.2.0",
     "electron-builder": "^24.0.0"
   },
-  "dependencies": {
-    "fs": "0.0.1", 
-    "path": "0.12.7"
-  },
   "build": {
     "appId": "com.steamgamepicker.app",
     "productName": "Steam Game Picker",
@@ -39,5 +35,8 @@
     "linux": {
       "target": "AppImage"
     }
+  },
+  "dependencies": {
+    "path": "^0.12.7"
   }
 }
