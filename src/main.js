@@ -59,13 +59,35 @@ ipcMain.handle("refresh-game-list", () => {
   return games;
 });
 
-const { exec } = require('child_process');
+const { exec } = require("child_process");
 
-ipcMain.handle('launch-game', (event, appid) => {
+ipcMain.handle("launch-game", (event, appid) => {
   const command = `start steam://rungameid/${appid}`;
   exec(command, (error) => {
     if (error) {
-      console.error('Error launching game:', error);
+      console.error("Error launching game:", error);
     }
   });
+});
+
+ipcMain.handle("blacklist-game", (event, gameName) => {
+  const blacklistPath = path.join(__dirname, "blacklist.json");
+
+  try {
+    // Read the current blacklist
+    const data = fs.readFileSync(blacklistPath, "utf-8");
+    const json = JSON.parse(data);
+
+    // Check if the game is already blacklisted
+    if (!json.blacklist.includes(gameName)) {
+      json.blacklist.push(gameName);
+      fs.writeFileSync(blacklistPath, JSON.stringify(json, null, 2));
+      return `Game "${gameName}" has been blacklisted.`;
+    } else {
+      return `Game "${gameName}" is already blacklisted.`;
+    }
+  } catch (error) {
+    console.error("Error reading blacklist:", error);
+    return `Error blacklisting game "${gameName}".`;
+  }
 });
