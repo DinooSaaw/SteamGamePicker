@@ -23,11 +23,13 @@ function parseGameData(filePath) {
     const lastPlayedMatch = gameData.match(/"LastPlayed"\s*"([^"]+)"/);
 
     if (appidMatch && nameMatch) {
+        const appid = appidMatch[1];
         return {
-            appid: appidMatch[1],
+            appid,
             name: nameMatch[1],
             lastUpdated: lastUpdatedMatch ? new Date(parseInt(lastUpdatedMatch[1]) * 1000) : null,
-            lastPlayed: lastPlayedMatch ? new Date(parseInt(lastPlayedMatch[1]) * 1000) : null
+            lastPlayed: lastPlayedMatch ? new Date(parseInt(lastPlayedMatch[1]) * 1000) : null,
+            iconUrl: `https://cdn.cloudflare.steamstatic.com/steam/apps/${appid}/header.jpg`
         };
     }
     return null;
