@@ -1,7 +1,11 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const randomGameButton = document.getElementById('random-game-button');
     const refreshButton = document.getElementById('refresh-button');
     const gameDisplay = document.getElementById('game-display');
+
+    // Refresh the game list automatically when the page loads
+    const refreshedGames = await window.electronAPI.refreshGameList();
+    console.log('Game list refreshed:', refreshedGames);
 
     // Get a random game when the button is clicked
     randomGameButton.addEventListener('click', async () => {
@@ -11,10 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const lastPlayedFormatted = formatDate(randomGame.lastPlayed);
         const lastUpdatedFormatted = formatDate(randomGame.lastUpdated);
         
-        gameDisplay.textContent = `
-            Random Game: ${randomGame.name} 
-            - Last Played: ${lastPlayedFormatted} 
-            - Last Updated: ${lastUpdatedFormatted}
+        // Display the game info with specific formatting
+        gameDisplay.innerHTML = `
+            <div id="game-name">${randomGame.name}</div>
+            <div id="game-details">
+                <div class="game-detail">Last Played: ${lastPlayedFormatted}</div>
+                <div class="game-detail">Last Updated: ${lastUpdatedFormatted}</div>
+            </div>
         `;
     });
 

@@ -1,16 +1,19 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Steam Game Picker</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Steam Game Picker</h1>
-    <button id="random-game-button">Get Random Game</button>
-    <button id="refresh-button">Refresh Game List</button>
-    <p id="game-display"></p>
-
+    <div id="app-container">
+        <h1>Steam Game Picker</h1>
+        <button id="random-game-button">Get Random Game</button>
+        <button id="refresh-button">Refresh Game List</button>
+        <div id="game-display">Select a game to see the details!</div>
+    </div>
     <script src="renderer.js"></script>
 </body>
 </html>
