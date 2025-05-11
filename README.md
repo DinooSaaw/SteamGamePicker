@@ -16,7 +16,7 @@ A desktop application built with **Electron** that randomly selects a Steam game
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/steam-game-picker.git
+   git clone https://github.com/DinooSaaw/SteamGamePicker.git
    cd steam-game-picker
    ```
 
