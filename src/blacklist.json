@@ -1,0 +1,6 @@
+{
+  "blacklist": [
+    "Wallpaper Engine",
+    "Steamworks Common Redistributables"
+  ]
+}

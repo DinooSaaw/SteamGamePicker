@@ -1,20 +1,19 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const fs = require('fs');
-const os = require('os');
+const { getSteamGames } = require('./steam-library');
 
 let mainWindow;
 
 function createWindow() {
-    mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-            preload: path.join(__dirname, 'preload.js'), // Specify preload script
-            contextIsolation: true,  // Ensure security by isolating contexts
-            enableRemoteModule: false, // Disable remote module for security reasons
-        }
-    });
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'), // Specify preload script
+      contextIsolation: true,  // This must be true for security
+      enableRemoteModule: true,
+    }
+  });
 
     mainWindow.loadFile('index.html');  // Load the HTML page into the window
 }
@@ -34,34 +33,6 @@ app.on('window-all-closed', () => {
         app.quit();
     }
 });
-
-function getSteamGames() {
-    const steamPath = path.join('C:', 'Program Files (x86)', 'Steam', 'steamapps'); // Default Steam path
-    const games = [];
-
-    // Check if the directory exists
-    if (!fs.existsSync(steamPath)) {
-        console.error(`Steam directory not found at: ${steamPath}`);
-        return [];
-    }
-
-    const files = fs.readdirSync(steamPath);
-    files.forEach(file => {
-        if (file.endsWith('.acf')) {
-            // Each .acf file corresponds to a game
-            const gameData = fs.readFileSync(path.join(steamPath, file), 'utf-8');
-            console.log(`[DEBUG] (main.js:52:19) gameData`, gameData);
-            const gameName = gameData.match(/"name"\s*"([^"]+)"/);
-            if (gameName) {
-                games.push(gameName[1]);
-            }
-        }
-    });
-
-    console.log(`[DEBUG] (main.js:60:12) games`, games);
-    return games;
-}
-
 
 // Handle the request from the renderer process to get a random game
 ipcMain.handle('get-random-game', () => {
