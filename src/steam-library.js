@@ -1,4 +1,3 @@
-// steamGames.js
 const fs = require('fs');
 const path = require('path');
 
@@ -13,6 +12,25 @@ function loadBlacklist() {
         console.error('Error loading blacklist:', error);
         return []; // Return an empty array if there's an error
     }
+}
+
+// Function to extract the required game data from an .acf file
+function parseGameData(filePath) {
+    const gameData = fs.readFileSync(filePath, 'utf-8');
+    const appidMatch = gameData.match(/"appid"\s*"(\d+)"/);
+    const nameMatch = gameData.match(/"name"\s*"([^"]+)"/);
+    const lastUpdatedMatch = gameData.match(/"lastupdated"\s*"([^"]+)"/);
+    const lastPlayedMatch = gameData.match(/"LastPlayed"\s*"([^"]+)"/);
+
+    if (appidMatch && nameMatch) {
+        return {
+            appid: appidMatch[1],
+            name: nameMatch[1],
+            lastUpdated: lastUpdatedMatch ? new Date(parseInt(lastUpdatedMatch[1]) * 1000) : null,
+            lastPlayed: lastPlayedMatch ? new Date(parseInt(lastPlayedMatch[1]) * 1000) : null
+        };
+    }
+    return null;
 }
 
 // Function to get the list of installed Steam games
@@ -32,16 +50,9 @@ function getSteamGames() {
     const files = fs.readdirSync(steamPath);
     files.forEach(file => {
         if (file.endsWith('.acf')) {
-            // Each .acf file corresponds to a game
-            const gameData = fs.readFileSync(path.join(steamPath, file), 'utf-8');
-            const gameName = gameData.match(/"name"\s*"([^"]+)"/);
-            if (gameName) {
-                const name = gameName[1];
-
-                // Check if the game is in the blacklist and exclude it if it is
-                if (!blacklist.includes(name)) {
-                    games.push(name);
-                }
+            const gameData = parseGameData(path.join(steamPath, file));
+            if (gameData && !blacklist.includes(gameData.name)) {
+                games.push(gameData);
             }
         }
     });
@@ -49,4 +60,11 @@ function getSteamGames() {
     return games;
 }
 
-module.exports = { getSteamGames };
+// Function to refresh the game list
+function refreshGameList() {
+    const games = getSteamGames();
+    fs.writeFileSync(path.join(__dirname, 'gameList.json'), JSON.stringify(games, null, 2));
+    return games;
+}
+
+module.exports = { getSteamGames, refreshGameList };
