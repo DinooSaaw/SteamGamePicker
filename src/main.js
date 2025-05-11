@@ -58,3 +58,14 @@ ipcMain.handle("refresh-game-list", () => {
   const games = refreshGameList();
   return games;
 });
+
+const { exec } = require('child_process');
+
+ipcMain.handle('launch-game', (event, appid) => {
+  const command = `start steam://rungameid/${appid}`;
+  exec(command, (error) => {
+    if (error) {
+      console.error('Error launching game:', error);
+    }
+  });
+});

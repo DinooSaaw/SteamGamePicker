@@ -16,18 +16,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     const lastUpdatedFormatted = formatDate(randomGame.lastUpdated);
 
     // Display the game info with specific formatting
+    // Inside gameDisplay.innerHTML assignment
     gameDisplay.innerHTML = `
-    <div id="game-name">${randomGame.name}</div>
-    <img 
-        src="https://cdn.cloudflare.steamstatic.com/steam/apps/${randomGame.appid}/header.jpg" 
-        alt="${randomGame.name} Art" 
-        class="game-header"
-    />
-    <div id="game-details">
-        <div class="game-detail">Last Played: ${lastPlayedFormatted}</div>
-        <div class="game-detail">Last Updated: ${lastUpdatedFormatted}</div>
-    </div>
+  <div id="game-name">${randomGame.name}</div>
+  <img 
+      src="https://cdn.cloudflare.steamstatic.com/steam/apps/${randomGame.appid}/header.jpg" 
+      alt="${randomGame.name} Art" 
+      class="game-header"
+  />
+  <div id="game-details">
+      <div class="game-detail">Last Played: ${lastPlayedFormatted}</div>
+      <div class="game-detail">Last Updated: ${lastUpdatedFormatted}</div>
+  </div>
+  <button id="launch-button">Launch Game</button>
 `;
+
+    // Add this **after** setting innerHTML:
+    document.getElementById("launch-button").addEventListener("click", () => {
+      window.electronAPI.launchGame(randomGame.appid);
+    });
   });
 
   // Refresh the game list when the refresh button is clicked
