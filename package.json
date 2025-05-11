@@ -1,15 +1,43 @@
 {
   "name": "steamgamepicker",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/main.js",
   "scripts": {
-  "start": "electron src/main.js"
-},
+    "start": "electron src/main.js",
+    "build": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "author": "DinooSaaw",
+  "license": "MIT",
+  "description": "A desktop application built with Electron that randomly selects a Steam game from your installed games, with features to launch the game, blacklist it, or skip it for the session.",
   "devDependencies": {
-    "electron": "^36.2.0"
+    "electron": "^36.2.0",
+    "electron-builder": "^24.0.0"
+  },
+  "dependencies": {
+    "fs": "0.0.1", 
+    "path": "0.12.7"
+  },
+  "build": {
+    "appId": "com.steamgamepicker.app",
+    "productName": "Steam Game Picker",
+    "files": [
+      "dist/**/*",
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }
