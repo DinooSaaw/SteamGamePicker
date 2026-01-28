@@ -13,7 +13,7 @@
   "description": "A desktop application built with Electron that randomly selects a Steam game from your installed games, with features to launch the game, blacklist it, or skip it for the session.",
   "devDependencies": {
     "electron": "^36.8.1",
-    "electron-builder": "^24.0.0"
+    "electron-builder": "^26.6.0"
   },
   "build": {
     "appId": "com.steamgamepicker.app",
